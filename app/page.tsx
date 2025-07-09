@@ -23,6 +23,10 @@ import {
   ChevronRight,
   PanelLeftClose,
   PanelLeftOpen,
+  AlertCircle,
+  Clock,
+  Activity,
+  XCircle,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -58,28 +62,32 @@ const summaryCards = [
     value: "204",
     change: "+12.5%",
     trend: "up",
-    icon: AlertTriangle,
+    icon: AlertCircle,
+    iconColor: "text-orange-500",
   },
   {
     title: "Pending Issues",
     value: "34",
     change: "-10.4%",
     trend: "down",
-    icon: AlertTriangle,
+    icon: Clock,
+    iconColor: "text-amber-500",
   },
   {
     title: "Running Services",
     value: "34",
     change: "+12.5%",
     trend: "up",
-    icon: Monitor,
+    icon: Activity,
+    iconColor: "text-green-500",
   },
   {
     title: "Interruptions",
     value: "204",
     change: "+12.5%",
     trend: "up",
-    icon: X,
+    icon: XCircle,
+    iconColor: "text-red-500",
   },
 ]
 
@@ -187,12 +195,24 @@ const tableData = [
 
 function StatusIndicator({ status }: { status: string }) {
   if (status === "success") {
-    return <Check className="w-4 h-4 text-green-600" />
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <Check className="w-4 h-4 text-green-600" />
+      </div>
+    )
   }
   if (status === "error") {
-    return <X className="w-4 h-4 text-red-600" />
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <X className="w-4 h-4 text-red-600" />
+      </div>
+    )
   }
-  return <span className="text-sm text-muted-foreground">Text</span>
+  return (
+    <div className="flex items-center justify-center w-full h-full">
+      <span className="text-sm text-muted-foreground">Text</span>
+    </div>
+  )
 }
 
 function MainSidebar({
@@ -332,7 +352,7 @@ function PaymentHealthDashboard() {
           <Card key={index}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
-              <card.icon className="h-4 w-4 text-muted-foreground" />
+              <card.icon className={cn("h-4 w-4", card.iconColor)} />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{card.value}</div>
@@ -401,7 +421,7 @@ function PaymentHealthDashboard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[150px]">Service</TableHead>
+                <TableHead className="w-[150px] text-center">Service</TableHead>
                 <TableHead className="text-center">Today</TableHead>
                 <TableHead className="text-center">6 Jul</TableHead>
                 <TableHead className="text-center">5 Jul</TableHead>
@@ -415,29 +435,29 @@ function PaymentHealthDashboard() {
             <TableBody>
               {tableData.map((row, index) => (
                 <TableRow key={index}>
-                  <TableCell className="font-medium">{row.service}</TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="font-medium text-center">{row.service}</TableCell>
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row.today} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["6Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["5Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["4Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["3Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["2Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row["1Jul"]} />
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="text-center align-middle">
                     <StatusIndicator status={row.lastMonth} />
                   </TableCell>
                 </TableRow>
