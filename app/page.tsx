@@ -4,8 +4,8 @@ import { useState } from "react"
 import {
   ArrowUp,
   ArrowDown,
-  Check,
-  X,
+  CheckCircle,
+  XCircle,
   Search,
   CalendarIcon,
   Monitor,
@@ -21,12 +21,13 @@ import {
   Building,
   ChevronLeft,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   PanelLeftClose,
   PanelLeftOpen,
   AlertCircle,
   Clock,
   Activity,
-  XCircle,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -197,14 +198,14 @@ function StatusIndicator({ status }: { status: string }) {
   if (status === "success") {
     return (
       <div className="flex items-center justify-center w-full h-full">
-        <Check className="w-4 h-4 text-green-600" />
+        <CheckCircle className="w-5 h-5 text-green-600 fill-green-100" />
       </div>
     )
   }
   if (status === "error") {
     return (
       <div className="flex items-center justify-center w-full h-full">
-        <X className="w-4 h-4 text-red-600" />
+        <XCircle className="w-5 h-5 text-red-600 fill-red-100" />
       </div>
     )
   }
@@ -468,23 +469,42 @@ function PaymentHealthDashboard() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">Showing 1-10 of 100 entries</div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" disabled>
-              Previous
-            </Button>
-            <Button variant="outline" size="sm">
-              1
-            </Button>
-            <Button variant="outline" size="sm">
-              2
-            </Button>
-            <Button variant="outline" size="sm">
-              3
-            </Button>
-            <Button variant="outline" size="sm">
-              Next
-            </Button>
+          <div className="flex-1 text-sm text-muted-foreground">0 of {tableData.length} row(s) selected.</div>
+          <div className="flex items-center space-x-6 lg:space-x-8">
+            <div className="flex items-center space-x-2">
+              <p className="text-sm font-medium">Rows per page</p>
+              <Select defaultValue="10">
+                <SelectTrigger className="h-8 w-[70px]">
+                  <SelectValue placeholder="10" />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="30">30</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex w-[100px] items-center justify-center text-sm font-medium">Page 1 of 4</div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" className="hidden h-8 w-8 p-0 lg:flex bg-transparent" disabled>
+                <span className="sr-only">Go to first page</span>
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" className="h-8 w-8 p-0 bg-transparent" disabled>
+                <span className="sr-only">Go to previous page</span>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" className="h-8 w-8 p-0 bg-transparent">
+                <span className="sr-only">Go to next page</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" className="hidden h-8 w-8 p-0 lg:flex bg-transparent">
+                <span className="sr-only">Go to last page</span>
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
