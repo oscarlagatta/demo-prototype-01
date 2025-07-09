@@ -4,10 +4,6 @@ import { useState } from "react"
 import {
   ArrowUp,
   ArrowDown,
-  CheckCircle,
-  XCircle,
-  Search,
-  CalendarIcon,
   Monitor,
   Briefcase,
   AlertTriangle,
@@ -21,23 +17,15 @@ import {
   Building,
   ChevronLeft,
   ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   PanelLeftClose,
   PanelLeftOpen,
-  AlertCircle,
-  Clock,
-  Activity,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { format } from "date-fns"
+import { summaryCards, paymentServices } from "@/lib/data"
+import { columns } from "@/components/payment-health/columns"
+import { DataTable } from "@/components/payment-health/data-table"
 
 const mainSidebarItems = [
   { id: "e2e-monitor", title: "E2E Payment Monitor", icon: Monitor },
@@ -56,165 +44,6 @@ const e2eSubMenuItems = [
   { id: "emea-payments", title: "EMEA Payments", icon: Building },
   { id: "singapore", title: "Singapore", icon: MapPin },
 ]
-
-const summaryCards = [
-  {
-    title: "Recent Issues",
-    value: "204",
-    change: "+12.5%",
-    trend: "up",
-    icon: AlertCircle,
-    iconColor: "text-orange-500",
-  },
-  {
-    title: "Pending Issues",
-    value: "34",
-    change: "-10.4%",
-    trend: "down",
-    icon: Clock,
-    iconColor: "text-amber-500",
-  },
-  {
-    title: "Running Services",
-    value: "34",
-    change: "+12.5%",
-    trend: "up",
-    icon: Activity,
-    iconColor: "text-green-500",
-  },
-  {
-    title: "Interruptions",
-    value: "204",
-    change: "+12.5%",
-    trend: "up",
-    icon: XCircle,
-    iconColor: "text-red-500",
-  },
-]
-
-const tableData = [
-  {
-    service: "US Wire",
-    today: "success",
-    "6Jul": "error",
-    "5Jul": "success",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "APAC Payments",
-    today: "success",
-    "6Jul": "error",
-    "5Jul": "success",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "EMEA Payments",
-    today: "success",
-    "6Jul": "error",
-    "5Jul": "success",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "Test",
-    today: "success",
-    "6Jul": "error",
-    "5Jul": "error",
-    "4Jul": "error",
-    "3Jul": "error",
-    "2Jul": "error",
-    "1Jul": "error",
-    lastMonth: "error",
-  },
-  {
-    service: "Test",
-    today: "success",
-    "6Jul": "success",
-    "5Jul": "success",
-    "4Jul": "success",
-    "3Jul": "success",
-    "2Jul": "success",
-    "1Jul": "success",
-    lastMonth: "success",
-  },
-  {
-    service: "Test",
-    today: "error",
-    "6Jul": "success",
-    "5Jul": "text",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "Test",
-    today: "success",
-    "6Jul": "success",
-    "5Jul": "text",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "Test",
-    today: "success",
-    "6Jul": "success",
-    "5Jul": "text",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-  {
-    service: "Test",
-    today: "success",
-    "6Jul": "success",
-    "5Jul": "text",
-    "4Jul": "text",
-    "3Jul": "text",
-    "2Jul": "text",
-    "1Jul": "text",
-    lastMonth: "text",
-  },
-]
-
-function StatusIndicator({ status }: { status: string }) {
-  if (status === "success") {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <CheckCircle className="w-5 h-5 text-green-600 fill-green-100" />
-      </div>
-    )
-  }
-  if (status === "error") {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <XCircle className="w-5 h-5 text-red-600 fill-red-100" />
-      </div>
-    )
-  }
-  return (
-    <div className="flex items-center justify-center w-full h-full">
-      <span className="text-sm text-muted-foreground">Text</span>
-    </div>
-  )
-}
 
 function MainSidebar({
   selectedMainItem,
@@ -337,8 +166,6 @@ function SecondarySidebar({
 }
 
 function PaymentHealthDashboard() {
-  const [date, setDate] = useState<Date>(new Date())
-
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -377,136 +204,13 @@ function PaymentHealthDashboard() {
           <h2 className="text-lg font-semibold mb-2">Service History</h2>
           <p className="text-sm text-muted-foreground">
             The following table is a running log of the E2E Payment Monitor tool service interruptions for the past 12
-            months. Choose a status icon to see updates for that service.
+            months. Choose a status icon to see updates for that service. Use the filters and sorting options to find
+            specific services.
           </p>
         </div>
 
-        {/* Filter Controls */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input placeholder="Find a payment E2E Service" className="pl-10" />
-          </div>
-          <Select defaultValue="all">
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Filter by payment region" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Filter by payment region</SelectItem>
-              <SelectItem value="us">US</SelectItem>
-              <SelectItem value="apac">APAC</SelectItem>
-              <SelectItem value="emea">EMEA</SelectItem>
-            </SelectContent>
-          </Select>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full sm:w-[200px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground",
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "yyyy/MM/dd") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" selected={date} onSelect={(date) => date && setDate(date)} initialFocus />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        {/* Table */}
-        <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[150px] text-center">Service</TableHead>
-                <TableHead className="text-center">Today</TableHead>
-                <TableHead className="text-center">6 Jul</TableHead>
-                <TableHead className="text-center">5 Jul</TableHead>
-                <TableHead className="text-center">4 Jul</TableHead>
-                <TableHead className="text-center">3 Jul</TableHead>
-                <TableHead className="text-center">2 Jul</TableHead>
-                <TableHead className="text-center">1 Jul</TableHead>
-                <TableHead className="text-center">Last Month</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tableData.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium text-center">{row.service}</TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row.today} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["6Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["5Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["4Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["3Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["2Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row["1Jul"]} />
-                  </TableCell>
-                  <TableCell className="text-center align-middle">
-                    <StatusIndicator status={row.lastMonth} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Pagination */}
-        <div className="flex items-center justify-between">
-          <div className="flex-1 text-sm text-muted-foreground">0 of {tableData.length} row(s) selected.</div>
-          <div className="flex items-center space-x-6 lg:space-x-8">
-            <div className="flex items-center space-x-2">
-              <p className="text-sm font-medium">Rows per page</p>
-              <Select defaultValue="10">
-                <SelectTrigger className="h-8 w-[70px]">
-                  <SelectValue placeholder="10" />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="30">30</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                  <SelectItem value="100">100</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex w-[100px] items-center justify-center text-sm font-medium">Page 1 of 4</div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" className="hidden h-8 w-8 p-0 lg:flex bg-transparent" disabled>
-                <span className="sr-only">Go to first page</span>
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" className="h-8 w-8 p-0 bg-transparent" disabled>
-                <span className="sr-only">Go to previous page</span>
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" className="h-8 w-8 p-0 bg-transparent">
-                <span className="sr-only">Go to next page</span>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" className="hidden h-8 w-8 p-0 lg:flex bg-transparent">
-                <span className="sr-only">Go to last page</span>
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
+        {/* Data Table */}
+        <DataTable columns={columns} data={paymentServices} />
       </div>
     </div>
   )
